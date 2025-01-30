@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  account_service:
+    build: ./account_service
+    container_name: account_service
+    ports:
+      - "5001:5001"
+    networks:
+      - bank_network
+
+  transaction_service:
+    build: ./transaction_service
+    container_name: transaction_service
+    ports:
+      - "5002:5002"
+    depends_on:
+      - account_service
+      - notification_service
+    networks:
+      - bank_network
+
+  notification_service:
+    build: ./notification_service
+    container_name: notification_service
+    ports:
+      - "5003:5003"
+    networks:
+      - bank_network
+
+networks:
+  bank_network:
+    driver: bridge
